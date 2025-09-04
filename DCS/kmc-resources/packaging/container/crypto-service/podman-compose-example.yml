@@ -1,0 +1,36 @@
+version: '3.5'
+
+secrets:
+  tls_host_cert:
+    external: true
+  tls_host_key:
+    external: true
+  tls_mtls_truststore:
+    external: true
+  tls_mtls_truststore_pass:
+    external: true
+  tls_ca_bundle:
+    external: true
+  crypto_keystore:
+    external: true
+  crypto_keystore_pass:
+    external: true
+  #kmc_crypto_cfg:
+  #  external: true
+
+services:
+  cryptosvc:
+    image: kmc-crypto-service:3.7.0
+    ports:
+      - "8443:8443"
+    restart: always
+    secrets:
+      - tls_host_cert
+      - tls_host_key
+      - tls_mtls_truststore
+      - tls_mtls_truststore_pass
+      - tls_ca_bundle
+      - crypto_keystore
+      - crypto_keystore_pass
+      #- kmc_crypto_cfg
+

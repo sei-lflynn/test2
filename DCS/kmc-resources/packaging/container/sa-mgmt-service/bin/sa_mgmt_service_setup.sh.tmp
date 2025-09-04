@@ -1,0 +1,262 @@
+#!/bin/bash 
+################################################################################
+# sa_mgmt_service_setup.sh
+#
+# Container entrypoint script - configures runtime settings/files, executes
+# sa_mgmt service
+###############################################################################
+
+debug() {
+  while [ : ]; do
+    sleep 600
+  done
+}
+
+BCFIPS_VER=2.0.0
+
+# ammos-server-cert.pem
+if [ ! -r /etc/pki/tls/certs/ammos-server-cert.pem ]; then
+  if [ -r /tls/ammos-server-cert.pem ]; then
+    /bin/cp /tls/ammos-server-cert.pem /etc/pki/tls/certs/ammos-server-cert.pem
+  elif [ -r /run/secrets/tls_host_cert ]; then
+    /bin/cp /run/secrets/tls_host_cert /etc/pki/tls/certs/ammos-server-cert.pem
+  elif [ ! -z "${TLS_HOST_CERT}" ]; then
+    echo "${TLS_HOST_CERT}" > /etc/pki/tls/certs/ammos-server-cert.pem
+  fi
+  if [ -f /etc/pki/tls/certs/ammos-server-cert.pem ]; then
+    /bin/chown root:root /etc/pki/tls/certs/ammos-server-cert.pem
+    /bin/chmod 444 /etc/pki/tls/certs/ammos-server-cert.pem
+  fi
+fi
+
+# ammos-server-key.pem
+if [ ! -r /etc/pki/tls/private/ammos-server-key.pem ]; then
+  if [ -r /tls/ammos-server-key.pem ]; then
+    /bin/cp /tls/ammos-server-key.pem /etc/pki/tls/private/ammos-server-key.pem
+  elif [ -r /run/secrets/tls_host_key ]; then
+    /bin/cp /run/secrets/tls_host_key /etc/pki/tls/private/ammos-server-key.pem
+  elif [ ! -z "${TLS_HOST_KEY}" ]; then
+    echo "${TLS_HOST_KEY}" > /etc/pki/tls/private/ammos-server-key.pem
+  fi
+  if [ -r /etc/pki/tls/private/ammos-server-key.pem ]; then
+    /bin/chown root:crypto /etc/pki/tls/private/ammos-server-key.pem
+    /bin/chmod 440 /etc/pki/tls/private/ammos-server-key.pem
+  fi
+fi
+
+# KEYSTORE_FORMAT - PKCS12/BCFKS keystore formats - defaults to BCFKS
+if [ "${KEYSTORE_FORMAT}" == "PKCS12" ]; then
+  KEYSTORE_FILE_EXT='p12'
+else
+  KEYSTORE_FILE_EXT='bcfks'
+  KEYSTORE_FORMAT='BCFKS'
+fi
+
+# ammos-server-keystore PASSPHRASE - defaults to changeit
+HOST_KEYSTORE_PASS='changeit'
+if [ ! -z "${TLS_HOST_KEYSTORE_PASS}" ]; then
+  HOST_KEYSTORE_PASS=`echo ${TLS_HOST_KEYSTORE_PASS} | /bin/base64 -d -`
+elif [ -r /run/secrets/tls_host_keystore_pass ]; then
+  HOST_KEYSTORE_PASS=`cat /run/secrets/tls_host_keystore_pass`
+fi
+
+# ammos-server-keystore KEY PASSPHRASE - defaults to HOST_KEYSTORE_PASS
+# NOT CURRENTLY USED - 3.7.0
+HOST_KEY_PASS="${HOST_KEYSTORE_PASS}"
+#if [ -r /run/secrets/tls_host_key_pass ]; then
+#  HOST_KEY_PASS=`cat /run/secrets/tls_host_key_pass`
+#elif [ ! -z "${TLS_HOST_KEY_PASS}" ]; then
+#  HOST_KEYSTORE_PASS=`echo ${TLS_HOST_KEY_PASS} | /bin/base64 -d -`
+#fi
+
+# ammos-server-keystore 
+if [ ! -r "/etc/pki/tls/private/ammos-server-keystore.${KEYSTORE_FILE_EXT}" ]; then
+  if [ -r "/tls/ammos-server-keystore.${KEYSTORE_FILE_EXT}" ]; then
+    /bin/cp "/tls/ammos-server-keystore.${KEYSTORE_FILE_EXT}" "/etc/pki/tls/private/ammos-server-keystore.${KEYSTORE_FILE_EXT}"
+  elif [ -r /run/secrets/tls_host_keystore ]; then
+    /bin/cp /run/secrets/tls_host_keystore "/etc/pki/tls/private/ammos-server-keystore.${KEYSTORE_FILE_EXT}"
+  elif [ ! -z "${TLS_HOST_KEYSTORE}" ]; then
+    echo "${TLS_HOST_KEYSTORE}" | /bin/base64 -d - > "/etc/pki/tls/private/ammos-server-keystore.${KEYSTORE_FILE_EXT}"
+  elif [ -r /etc/pki/tls/certs/ammos-server-cert.pem -a -r /etc/pki/tls/private/ammos-server-key.pem ]; then
+    [ -n "${DEBUG}" ] && echo "DEBUG: Generating HOST PKCS12 keystore from ammos-server-key.pem and ammos-server-cert.pem"
+    /usr/bin/openssl pkcs12 -export -in /etc/pki/tls/certs/ammos-server-cert.pem -inkey /etc/pki/tls/private/ammos-server-key.pem -out /etc/pki/tls/private/ammos-server-keystore.p12 --password "pass:${HOST_KEYSTORE_PASS}"
+    if [ "${KEYSTORE_FORMAT}" == "BCFKS" ]; then
+      # Generate BCFKS keystore if needed -- WARNING: can take a LONG time >45m
+      [ -n "${DEBUG}" ] && echo "DEBUG: Generating HOST BCFKS keystore from ammos-server-key.pem and ammos-server-cert.pem"
+      /usr/lib/jvm/jre-17-openjdk/bin/keytool -J-Dcom.redhat.fips=false -providerclass org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider -providerpath "/opt/ammos/kmc/lib/bc-fips-${BCFIPS_VER}.jar" -importkeystore -srckeystore /etc/pki/tls/private/ammos-server-keystore.p12 -srcstoretype PKCS12 -srcstorepass "${HOST_KEYSTORE_PASS}" -deststoretype BCFKS -deststorepass "${HOST_KEYSTORE_PASS}" -destkeypass "${HOST_KEY_PASS}" -destkeystore /etc/pki/tls/private/ammos-server-keystore.bcfks >/dev/null 2>&1
+    fi
+  else
+    echo "TLS_HOST_KEYSTORE not provided or generated - required for operation" >&2
+    if [ -n "${DEBUG}" ]; then
+      debug
+    else
+      exit 1
+    fi
+  fi
+  /bin/chown root:crypto /etc/pki/tls/private/ammos-server-keystore.*
+  /bin/chmod 440 /etc/pki/tls/private/ammos-server-keystore.*
+fi
+
+# ammos-ca-bundle.crt - must be provided
+if [ ! -r /etc/pki/tls/certs/ammos-ca-bundle.crt ]; then
+  if [ ! -z "${TLS_CA_BUNDLE}" ]; then
+    echo "${TLS_CA_BUNDLE}" > /etc/pki/tls/certs/ammos-ca-bundle.crt
+  elif [ -r /tls/ammos-ca-bundle.crt ]; then
+    /bin/cp /tls/ammos-ca-bundle.crt /etc/pki/tls/certs/ammos-ca-bundle.crt
+  elif [ -r /run/secrets/tls_ca_bundle ]; then
+    /bin/cp /run/secrets/tls_ca_bundle /etc/pki/tls/certs/ammos-ca-bundle.crt
+  else
+    echo "TLS_CA_BUNDLE not provided - required for operation" >&2
+    if [ -n "${DEBUG}" ]; then
+      debug
+    else
+      exit 1
+    fi
+  fi
+  /bin/chown root:root /etc/pki/tls/certs/ammos-ca-bundle.crt
+  /bin/chmod 444 /etc/pki/tls/certs/ammos-ca-bundle.crt
+fi
+
+# ammos-truststore.jks PASSPHRASE - defaults to changeit
+TRUSTSTORE_PASS='changeit'
+if [ ! -z "${TLS_TRUSTSTORE_PASS}" ]; then
+  TRUSTSTORE_PASS=`echo ${TLS_TRUSTSTORE_PASS} | /bin/base64 -d -`
+elif [ -r /run/secrets/tls_truststore_pass ]; then
+  TRUSTSTORE_PASS=`/bin/cat /run/secrets/tls_truststore_pass`
+fi
+
+# ammos-truststore.jks - generated from TLS_CA_BUNDLE if not provided
+if [ ! -r /etc/pki/tls/certs/ammos-truststore.jks ]; then
+  if [ -r /tls/ammos-truststore.jks ]; then
+    /bin/cp /tls/ammos-truststore.jks /etc/pki/tls/certs/ammos-truststore.jks
+  elif [ -r /run/secrets/tls_truststore ]; then
+    /bin/cp /run/secrets/tls_truststore /etc/pki/tls/certs/ammos-truststore.jks
+  elif [ ! -z "${TLS_TRUSTSTORE}" ]; then
+    echo "${TLS_TRUSTSTORE}" | /bin/base64 -d -> /etc/pki/tls/certs/ammos-truststore.jks
+  else
+    [ -n "${DEBUG}" ] && echo "DEBUG: Generating ammos-truststore.jks from AMMOS CA Bundle"
+    /opt/ammos/kmc/services/sa-mgmt/bin/buildjks.sh -f /etc/pki/tls/certs/ammos-truststore.jks -b /etc/pki/tls/certs/ammos-ca-bundle.crt -p "${TRUSTSTORE_PASS}" >/dev/null 2>&1
+  fi
+  /bin/chown root:root /etc/pki/tls/certs/ammos-truststore.jks
+  /bin/chmod 444 /etc/pki/tls/certs/ammos-truststore.jks
+fi
+
+# Fix for java system CA
+if [ ! -r /etc/pki/ca-trust/source/anchors/ammos-ca-bundle.crt ]; then
+  /bin/cp /etc/pki/tls/certs/ammos-ca-bundle.crt /etc/pki/ca-trust/source/anchors/
+  /bin/update-ca-trust
+fi
+
+# ammos-mtls-truststore passphrase
+MTLS_TRUSTSTORE_PASS="changeit"
+if [ -r /run/secrets/tls_mtls_truststore_pass ]; then
+  MTLS_TRUSTSTORE_PASS=`/bin/cat /run/secrets/tls_mtls_truststore_pass`
+elif [ ! -z "${TLS_MTLS_TRUSTSTORE_PASS}" ]; then
+  MTLS_TRUSTSTORE_PASS=`echo ${TLS_MTLS_TRUSTSTORE_PASS} | /bin/base64 -d -`
+fi
+
+# ammos-mtls-truststore.jks - MUST be provided for operation unless MTLS disabled
+if [ -z "${DISABLE_MTLS}" ]; then
+  if [ ! -r /etc/pki/tls/private/ammos-mtls-truststore.jks ]; then
+    if [ -r /tls/ammos-mtls-truststore.jks ]; then
+      /bin/cp /tls/ammos-mtls-truststore.jks /etc/pki/tls/private/ammos-mtls-truststore.jks
+    elif [ -r /run/secrets/tls_mtls_truststore ]; then
+      /bin/cp /run/secrets/tls_mtls_truststore /etc/pki/tls/private/ammos-mtls-truststore.jks
+    elif [ ! -z "${TLS_MTLS_TRUSTSTORE}" ]; then
+      echo "${TLS_MTLS_TRUSTSTORE}" | /bin/base64 -d - > /etc/pki/tls/private/ammos-mtls-truststore.jks
+    else
+      echo "TLS_MTLS_TRUSTSTORE not provided - required for operation" >&2
+      if [ -n "${DEBUG}" ]; then
+        debug
+      else
+        exit 1
+      fi
+    fi
+    /bin/chown root:crypto /etc/pki/tls/private/ammos-mtls-truststore.jks
+    /bin/chmod 440 /etc/pki/tls/private/ammos-mtls-truststore.jks
+  fi
+fi
+
+if [ -z "${SADB_FQDN}" ]; then
+  echo "SADB_FQDN not provided - required for operation" >&2
+  if [ -n "${DEBUG}" ]; then
+    debug
+  else
+    exit 1
+  fi
+fi
+
+# SA Management Service - kmc-sa-mgmt-service.properties
+SVC_CFG_DIR='/opt/ammos/kmc/services/sa-mgmt/etc'
+SVC_PROPS="${SVC_CFG_DIR}/kmc-sa-mgmt-service.properties"
+if [ ! -r "${SVC_CFG_DIR}/.props.configured" ]; then 
+  /bin/sed -i -e "s|^#server.ssl.key-store.password=.*|server.ssl.key-store.password=${HOST_KEYSTORE_PASS}|" "${SVC_PROPS}"
+  /bin/sed -i -e "s|^#server.ssl.trust-store.password=.*|server.ssl.trust-store.password=${MTLS_TRUSTSTORE_PASS}|" "${SVC_PROPS}"
+
+  /bin/sed -i -e "s|^#db.host=localhost|db.host=${SADB_FQDN}|" "${SVC_PROPS}"
+
+  if [ "${KEYSTORE_FORMAT}" == "PKCS12" ]; then
+    /bin/sed -i -e "s|^#server.ssl.key-store=.*|server.ssl.key-store=/etc/pki/tls/private/ammos-server-keystore.${KEYSTORE_FILE_EXT}|" "${SVC_PROPS}"
+    /bin/sed -i -e "s|^#server.ssl.key-store-type=.*|server.ssl.key-store-type=PKCS12|" "${SVC_PROPS}"
+  fi
+
+  if [ -n "${DISABLE_MTLS}" ]; then
+    /bin/sed -i -e "s|^#server.ssl.client-auth=.*|server.ssl.client-auth=NONE|" "${SVC_PROPS}"
+  fi
+
+  if [ -n "${DB_USER}" ]; then
+    /bin/sed -i -e "s|^#db.auth.user=cryptosvc|db.auth.user=${DB_USER}|" "${SVC_PROPS}"
+  fi
+
+  if [ -n "${DB_MTLS}" ]; then
+    /bin/sed -i -e "s|^#db.tls=true|db.mtls=${DB_MTLS}|" "${SVC_PROPS}"
+  fi
+
+  # Database User Password - defaults empty
+  DB_PASS=""
+  if [ -r /run/secrets/db_user_pass ]; then
+    DB_PASS=`/bin/cat /run/secrets/db_user_pass`
+  elif [ ! -z "${DB_USER_PASS}" ]; then
+    DB_PASS=`echo ${DB_USER_PASS} | /bin/base64 -d -`
+  fi
+  if [ -n "${DB_PASS}" ]; then
+    /bin/sed -i -e "s|^#db.auth.pass=|db.auth.pass=${DB_PASS}|" "${SVC_PROPS}"
+  fi
+
+  /bin/touch "${SVC_CFG_DIR}/.props.configured"
+fi
+
+# Java Settings
+JAVA="/lib/jvm/jre-17-openjdk"
+
+if [ -n "${JAVA_MAX_HEAP}" ]; then
+  MAX_HEAP="${JAVA_MAX_HEAP}"
+else
+  MAX_HEAP="2g"
+fi
+
+if [ -n "${JAVA_MIN_HEAP}" ]; then
+  MIN_HEAP="${JAVA_MIN_HEAP}"
+else
+  MIN_HEAP="1g"
+fi
+
+#JAVA_OPTS="-server -Djava.awt.headless=true -Dhttps.protocols='TLSv1.2' -Djava.security.egd=file:///dev/urandom -Djdk.tls.maxCertificateChainLength=50 -Xms${MIN_HEAP} -Xmx${MAX_HEAP} -Dorg.bouncycastle.jca.enable_jks=true --add-exports=java.base/sun.security.provider=ALL-UNNAMED --add-exports=java.base/sun.security.rsa=ALL-UNNAMED --add-exports=java.base/com.sun.crypto.provider=ALL-UNNAMED"
+JAVA_OPTS="-server -Djava.awt.headless=true -Dhttps.protocols='TLSv1.2' -Djava.security.egd=file:///dev/urandom -Djdk.tls.maxCertificateChainLength=50 -Xms${MIN_HEAP} -Xmx${MAX_HEAP} -Dorg.bouncycastle.jca.enable_jks=true -Djavax.net.ssl.trustStorePassword=${TRUSTSTORE_PASS} -Djavax.net.ssl.keyStorePassword=${HOST_KEYSTORE_PASS}"
+
+SPRING_OPTS="--spring.config.location=classpath:kmc-sa-mgmt-service.properties,optional:/opt/ammos/kmc/services/sa-mgmt/etc/kmc-sa-mgmt-service.properties --server.ssl.trust-store-password=${TRUSTSTORE_PASS} --server.ssl.key-store-password=${HOST_KEYSTORE_PASS}"
+
+# Run SA Management Service
+export LD_LIBRARY_PATH=/opt/ammos/kmc/lib
+[ -n "${DEBUG}" ] && echo "DEBUG: App startup: /bin/setpriv --reuid=__CRYPTO_UID__ --regid=__CRYPTO_GID__ --pdeathsig=keep --init-groups --inh-caps=-all ${JAVA}/bin/java ${JAVA_OPTS} -jar /opt/ammos/kmc/services/sa-mgmt/lib/kmc-sa-mgmt.jar ${SPRING_OPTS}"
+
+/bin/setpriv --reuid=__CRYPTO_UID__ --regid=__CRYPTO_GID__ --pdeathsig=keep --init-groups --inh-caps=-all ${JAVA}/bin/java ${JAVA_OPTS} -jar /opt/ammos/kmc/services/sa-mgmt/lib/kmc-sa-mgmt.jar ${SPRING_OPTS}
+
+# For container debugging
+if [ -n "${DEBUG}" ]; then
+  echo '-------------------------------'
+  echo 'DEBUG'
+  echo '-------------------------------'
+  debug
+fi
+

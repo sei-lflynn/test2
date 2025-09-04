@@ -1,0 +1,63 @@
+doctype html
+head
+  title MMGIS
+  meta(charset='utf-8')
+  meta(name='viewport' content='width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0')
+  link(rel='shortcut icon' href='../public/images/logos/logo.png')
+  style.
+    @keyframes fadein {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    body, html {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: rgb(239, 239, 239);
+      color: rgb(117, 117, 117);
+      user-select: none;
+      font-family: sans-serif;
+    }
+    #main-container {
+      width: 100%;
+      height: 100%;
+      animation: fadein 1.5s;
+      cursor: pointer;
+    }
+    #title {
+      font-size: 20px;
+      margin: 90px 0px;
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    #code {
+      font-family: monospace;
+      font-size: 200px;
+      margin-top: 5px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      color: #555555;
+    }
+    #message {
+      font-size: 14px;
+      margin: 125px 0px 90px;
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+#main-container
+    #code 404
+    #title MMGIS
+    #message Click anywhere to return home...
+footer
+  script.
+    document.addEventListener('click', function() { document.location.href = window.location.origin })

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+
+  <Properties>
+    <Property name="kmcClientPath">/opt/ammos/kmc/logs</Property>
+    <Property name="kmcClientDebug">kmc-crypto-client-debug</Property>
+    <Property name="kmcClientAudit">kmc-crypto-client-audit</Property>
+  </Properties>
+
+  <Appenders>
+    <Console name="LogToConsole" target="SYSTEM_OUT">
+      <PatternLayout pattern="%m%n"/>
+    </Console>
+    <RollingFile name="LogKmcClientDebug" fileName="${kmcClientPath}/${kmcClientDebug}.log"
+                 filePattern="${kmcClientPath}/${kmcClientDebug}-%d{yyMMdd}-%i.log.gz">
+      <PatternLayout pattern="[%d{ISO8601}{UTC} UTC] [%t] %-5p %c - %m%n"/>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="100MB"/>
+      </Policies>
+      <DefaultRolloverStrategy max="30"/>
+    </RollingFile>
+    <RollingFile name="LogKmcClientAudit" fileName="${kmcClientPath}/${kmcClientAudit}.log"
+                 filePattern="${kmcClientPath}/${kmcClientAudit}-%d{yyMMdd}-%i.log.gz">
+      <PatternLayout pattern="[%d{ISO8601}{UTC} UTC] %m%n"/>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="100MB"/>
+      </Policies>
+      <DefaultRolloverStrategy max="30"/>
+    </RollingFile>
+  </Appenders>
+
+  <Loggers>
+    <Logger name="gov.nasa.jpl.ammos.kmc" level="info" additivity="false">
+      <AppenderRef ref="LogKmcClientDebug"/>
+    </Logger>
+    <Logger name="ch.ntb.inf.kmip" level="info" additivity="false">
+      <AppenderRef ref="LogKmcClientDebug"/>
+    </Logger>
+    <Logger name="AUDIT" level="info" additivity="false">
+      <AppenderRef ref="LogKmcClientAudit"/>
+    </Logger>
+    <Root level="error">
+      <AppenderRef ref="LogToConsole"/>
+    </Root>
+  </Loggers>
+
+</Configuration>

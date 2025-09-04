@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>kmc-sa-mgmt-service</short>
+  <description>KMC SA Management Service</description>
+  <port port="__SA_PORT__" protocol="tcp"/>
+</service>

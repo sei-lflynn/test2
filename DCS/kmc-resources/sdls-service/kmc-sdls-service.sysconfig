@@ -1,0 +1,15 @@
+# KMC SDLS Service Environment settings
+
+# General environment settings
+CATALINA_PID=__LOGPATH__/kmc-sdls-service.pid
+JAVA_HOME=/usr/lib/jvm/jre-17-openjdk
+JAVA_OPTS="-server -Djava.awt.headless=true -Dhttps.protocols='TLSv1.2,TLSv1.3' -Djava.security.egd=file:///dev/urandom -Djdk.tls.maxCertificateChainLength=50 -Xms2g -Xmx3g -Dorg.bouncycastle.jca.enable_jks=true"
+
+
+LD_LIBRARY_PATH=__LIBPATH__
+
+
+# User/Group Settings for the Service
+TOMCAT_USER=__CRYPTOUSR__
+TOMCAT_GROUP=__CRYPTOGRP__
+

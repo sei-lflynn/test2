@@ -1,0 +1,19 @@
+# Systemd unit file for kmc-crypto-service
+#
+[Unit]
+Description=KMC Crypto Service
+After=syslog.target network.target
+
+[Service]
+Type=exec
+EnvironmentFile=/etc/sysconfig/kmc-crypto-service
+PIDFile=__LOGPATH__/kmc-crypto-service.pid
+ExecStart=/bin/bash -c '${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar __SVCPATH__/crypto-service/lib/crypto-service.jar --spring.config.location=classpath:kmc-crypto-service.properties,optional:__CFGPATH__/kmc-crypto-service.properties'
+
+ExecStop=/bin/kill ${MAINPID}
+#SuccessExitStatus=143
+User=__CRYPTOUSR__
+Group=__CRYPTOGRP__
+
+[Install]
+WantedBy=multi-user.target

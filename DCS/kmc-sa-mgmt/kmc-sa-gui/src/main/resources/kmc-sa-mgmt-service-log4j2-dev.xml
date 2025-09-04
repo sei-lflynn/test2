@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2022, by the California Institute of Technology.
+  ~ ALL RIGHTS RESERVED. United States Government Sponsorship acknowledged.
+  ~ Any commercial use must be negotiated with the Office of Technology
+  ~ Transfer at the California Institute of Technology.
+  ~
+  ~ This software may be subject to U.S. export control laws. By accepting
+  ~ this software, the user agrees to comply with all applicable U.S.
+  ~ export laws and regulations. User has the responsibility to obtain
+  ~ export licenses, or other export authority as may be required before
+  ~ exporting such information to foreign countries or providing access to
+  ~ foreign persons.
+  -->
+
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable"/>
+        </Console>
+
+    </Appenders>
+
+    <Loggers>
+        <!-- LOG everything at INFO level -->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+
+        <Logger name="gov.nasa.jpl" level="trace"></Logger>
+        <Logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="DEBUG"></Logger>
+    </Loggers>
+
+</Configuration>

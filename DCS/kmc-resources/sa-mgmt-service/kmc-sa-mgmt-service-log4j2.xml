@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <!--
+    <Properties>
+        <Property name="rootPath">/var/ammos/kmc/log/services/kmc-sa-mgmt</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable"/>
+        </Console>
+
+        <RollingFile name="RollingFile"
+                     fileName="${rootPath}/kmc-sa-mgmt-server.log"
+                     filePattern="${rootPath}/kmc-sa-mgmt-server-%d{-dd-MMMM-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy
+                        size="10 MB"/>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+
+        <Logger name="gov.nasa.jpl.ammos.asec.kmc.sadb" level="INFO"></Logger>
+        <Logger name="gov.nasa.jpl.ammos.asec.kmc.saserver" level="INFO"></Logger>
+        <Logger name="gov.nasa.jpl.ammos.asec.kmc.api" level="INFO"></Logger>
+        <Logger name="gov.nasa.jpl.ammos.asec.kmc.cli" level="INFO"></Logger>
+        <Logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="INFO"></Logger>
+    </Loggers>
+-->
+</Configuration>

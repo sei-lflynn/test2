@@ -1,0 +1,4 @@
+Main-Class: gov.nasa.jpl.ammos.kmc.crypto.KmcCryptoVersion
+Version: ${version}
+Built-Time: ${build.time}
+Copyright: Copyright 2020, by the California Institute of Technology.

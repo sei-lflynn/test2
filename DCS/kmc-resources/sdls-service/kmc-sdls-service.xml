@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>kmc-sdls-service</short>
+  <description>KMC SDLS Service</description>
+  <port port="__S_PORT__" protocol="tcp"/>
+</service>

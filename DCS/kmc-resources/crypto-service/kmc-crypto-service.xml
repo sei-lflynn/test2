@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>kmc-crypto-service</short>
+  <description>KMC Crypto Service</description>
+  <port port="__CS_PORT__" protocol="tcp"/>
+</service>

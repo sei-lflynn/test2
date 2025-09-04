@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Properties>
+        <Property name="rootPath">/opt/ammos/kmc/services/crypto-service/logs</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable"/>
+        </Console>
+
+        <RollingFile name="RollingFile"
+                     fileName="${rootPath}/kmc-crypto-service.log"
+                     filePattern="${rootPath}/kmc-crypto-service-%d{yyMMdd}-%i.log.gz">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <!-- rollover when the file reaches 100 MegaBytes -->
+                <SizeBasedTriggeringPolicy
+                        size="100 MB"/>
+                <SizeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+        
+        <Logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="INFO"></Logger>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- remove comments around default configuration to apply override -->
+
+<Configuration>
+<!--
+    <Properties>
+        <Property name="rootPath">/var/ammos/kmc/log/services/sdls-service</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable"/>
+        </Console>
+
+        <RollingFile name="RollingFile"
+                     fileName="${rootPath}/kmc-sdls-server.log"
+                     filePattern="${rootPath}/kmc-sdls-server-%d{yyMMdd_HHmmss}.log.gz">
+            <PatternLayout pattern="[%d{ISO8601}{UTC} UTC] [%t] %-5p %c - %m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+
+        <Logger name="gov.nasa.jpl" level="INFO"></Logger>
+        <Logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="INFO"></Logger>
+    </Loggers>
+
+--> 
+</Configuration>

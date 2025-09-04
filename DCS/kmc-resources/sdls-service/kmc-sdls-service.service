@@ -1,0 +1,18 @@
+# Systemd unit file for kmc-crypto-service
+#
+[Unit]
+Description=KMC SDLS Service
+After=syslog.target network.target
+
+[Service]
+Type=exec
+EnvironmentFile=/etc/sysconfig/kmc-sdls-service
+PIDFile=__LOGPATH__/kmc-sdls-service.pid
+ExecStart=/bin/bash -c '${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar __SVCPATH__/sdls-service/lib/sdls-service.jar --spring.config.location=classpath:kmc-sdls-service.properties,optional:__CFGPATH__/kmc-sdls-service.properties'
+ExecStop=/bin/kill ${MAINPID}
+#SuccessExitStatus=143
+User=__CRYPTOUSR__
+Group=__CRYPTOGRP__
+
+[Install]
+WantedBy=multi-user.target

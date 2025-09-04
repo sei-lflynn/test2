@@ -1,0 +1,1023 @@
+@font-face {
+    font-family: lato;
+    src: url(/public/fonts/lato/Lato-Regular.ttf);
+}
+@font-face {
+    font-family: lato-light;
+    src: url(/public/fonts/lato/Lato-Light.ttf);
+}
+@font-face {
+    font-family: roboto;
+    src: url(/public/fonts/roboto/Roboto-Regular.ttf);
+}
+
+@font-face {
+    font-family: FGDCGeoSym01;
+    src: url(/public/fonts/fgdc/FGDCGeoSym01.ttf);
+}
+@font-face {
+    font-family: FGDCGeoSym02;
+    src: url(/public/fonts/fgdc/FGDCGeoSym02.ttf);
+}
+@font-face {
+    font-family: FGDCGeoSym03;
+    src: url(/public/fonts/fgdc/FGDCGeoSym03.ttf);
+}
+@font-face {
+    font-family: FGDCGeoSym04;
+    src: url(/public/fonts/fgdc/FGDCGeoSym04.ttf);
+}
+@font-face {
+    font-family: FGDCGeoSym05;
+    src: url(/public/fonts/fgdc/FGDCGeoSym05.ttf);
+}
+
+html {
+    position: fixed;
+    top: 0;
+}
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+body {
+    background-color: var(--color-a);
+    /*background: linear-gradient(to top, #0F1111, #1E2021);*/
+
+    overflow: hidden !important;
+    color: #fff;
+    font-family: roboto;
+}
+
+/*Color variables*/
+:root {
+    --color-mmgis: #08aeea;
+    --color-a-5: #0f1010;
+    --color-a: #1d1f20; /*#010102;*/ /*#1f1f1f;*/
+    --color-a1: #3a3e40;
+    --color-a1-5: #2c2f30;
+    --color-a2: #575d60;
+    --color-a3: #747c81;
+    --color-a4: #949a9e;
+    --color-a5: #b4b8bb;
+    --color-a6: #d4d6d8;
+    --color-a7: #f4f5f5;
+    --color-b: #555555;
+    --color-c: #08aeea;
+    --color-c2: #0792c5;
+    --color-d: #2a2a2a;
+    --color-e: #3a3e40;
+    --color-f: #e1e1e1;
+    --color-h: #ffdd5c;
+    --color-g: #121212;
+    --color-i: #3a3e40;
+    --color-j: #3a3e40;
+    --color-k: #1d1f20; /*#262626;*/
+    --color-l: #fff; /*#ffe426;*/
+    --color-m: #c4c4c4;
+    --color-n: #151619;
+    --color-o: #2e6b8a;
+    --color-p: #747474;
+
+    --color-green: #00d200;
+    --color-green2: #08ea58;
+    --color-yellowgreen: #7eea08;
+    --color-yellow: #d2b800;
+    --color-blue: #00b6d2;
+    --color-orange: #d26100;
+    --color-orange2: #c57907;
+    --color-red: #d20000;
+    --color-red2: #ff5c5c;
+
+    --color-m1: #2c2f30;
+    --color-m2: #222829;
+    --color-m3: #1b1d1e;
+    --color-mh: #ebdc78;
+    --color-mw: #f8f8f8;
+    --color-mw2: #efefef;
+
+    --color-r1: #b30000;
+    --color-r2: #7c1158;
+    --color-r3: #4421af;
+    --color-r4: #1a53ff;
+    --color-r5: #00b7c7;
+    --color-r6: #8be04e;
+    --color-r7: #ebdc78;
+
+    --color-p0: #dbb658; /*#eae308;*/
+    --color-p1: #c0822f;
+    --color-p2: #ffeaaf;
+    --color-p3: #87b051; /*#08ea71;*/
+    --color-p4: #c43541; /*#ea0808;*/
+    --color-p5: #edd49e;
+    --color-p6: #e7bdcb;
+    --color-p7: #72d1cb;
+    --color-p8: #11495c;
+    --color-p9: #75351e; /*#5708ea;*/
+    --color-p10: #78b1c2;
+    --color-p11: #b0518f;
+
+    --color-vector: #245980;
+    --color-tile: #67401d;
+    --color-vectortile: #0792c5;
+    --color-query: #4c8b2d;
+    --color-data: #c43541;
+    --color-model: #a98732;
+    --color-velocity: #24807c;
+    --color-image: #b0518f;
+}
+
+#nodeenv {
+    display: none;
+    position: absolute;
+    width: 36px;
+    height: 1px;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: #333;
+    z-index: 10000;
+}
+
+#webgl-error-message {
+    display: none;
+}
+
+#topBar {
+}
+
+#topBarInfo {
+    width: 24px;
+    height: 24px;
+}
+
+#topBarHelp {
+    width: 24px;
+    height: 24px;
+}
+
+#topBarLink {
+    width: 24px;
+    height: 24px;
+}
+
+#topBarFullscreen {
+    width: 24px;
+    height: 24px;
+}
+
+#toggleUI {
+    opacity: 0.8;
+    cursor: pointer;
+    transition: color 0.3s;
+    width: 24px;
+    height: 24px;
+}
+
+#splitscreens {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: 1;
+}
+#vmgScreen {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+.splitterV {
+    height: 100%;
+    position: absolute;
+    cursor: col-resize;
+    display: flex;
+    align-items: center;
+    z-index: 500;
+    transition: opacity 0.3s;
+}
+.splitterV:hover {
+    opacity: 0.9;
+}
+
+.splitterVInner {
+    position: absolute;
+    left: -50%;
+    height: 100vh;
+    background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0),
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0)
+    );
+    text-align: center;
+    display: inline-flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.splitterVInner > div {
+    border-radius: 3px;
+}
+
+.splitterVInner i {
+    width: 48px;
+    height: 30px;
+    line-height: 30px;
+    cursor: col-resize;
+    color: #fff;
+}
+.splitterVInner i:hover {
+    color: var(--color-mmgis);
+    cursor: pointer;
+}
+
+#mapTopBar {
+    transition: padding-left 0.2s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+@media screen and (max-width: 800px) {
+    #mapTopBar {
+        padding-left: 134px !important;
+    }
+}
+#mapSplitInnerViewerInfo {
+    position: absolute;
+    left: 61px;
+    background: var(--color-a);
+    height: 30px;
+    line-height: 30px;
+    padding: 0px 8px;
+    border-radius: 3px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+}
+.splitterVInner i:hover ~ #mapSplitInnerViewerInfo {
+    opacity: 1;
+}
+
+#mapSplitInnerGlobeInfo {
+    position: absolute;
+    left: -82px;
+    background: var(--color-a);
+    height: 30px;
+    line-height: 30px;
+    padding: 0px 8px;
+    border-radius: 3px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+}
+.splitterVInner i:hover ~ #mapSplitInnerGlobeInfo {
+    opacity: 1;
+}
+
+.splitterH {
+    /*background-color: #1A1A1A;*/
+    width: 100%;
+    position: absolute;
+    /*border-top: 1px solid #333;*/
+    /*border-bottom: 1px solid rgba(0,0,0,0.95);*/
+    cursor: row-resize;
+    z-index: 6;
+}
+
+.splitterText {
+    -webkit-transition: all 0.25s ease-in;
+    transition: all 0.25s ease-in;
+    position: absolute;
+    font-weight: bolder;
+    transform: rotate(90deg);
+    margin-left: 0px;
+    font-size: 18px;
+    color: #555;
+    transform-origin: bottom left 0;
+}
+.splitterText.active {
+    margin-left: 24px;
+    color: #999;
+    font-size: 14px !important;
+    transform: rotate(0deg) !important;
+}
+
+#barBottom > i {
+    border-top: 1px solid var(--color-a-5);
+}
+
+.toolButton:hover {
+    background: var(--color-a1-5) !important;
+}
+
+.toolButtonSep.active {
+    color: var(--color-c) !important;
+    border-bottom: 2px solid var(--color-c);
+}
+.toolButtonSep#toolButtonSeparated_Legend.active {
+    border-bottom: none !important;
+}
+.toolButtonSep:hover {
+    color: var(--color-c) !important;
+}
+#tScreen {
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+}
+#toolsSplit {
+    left: 0px;
+}
+#toolsWrapper {
+    height: 0%;
+    width: 100%;
+    position: absolute;
+    box-shadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.2);
+}
+
+#toolbar {
+    width: auto;
+    background: var(--color-a);
+    height: 30px;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+}
+
+#logoGoBack {
+    transition: 0.25s ease-in;
+    position: absolute;
+    bottom: 1px;
+    left: 24px;
+    opacity: 0.2;
+    z-index: 103;
+}
+#logoGoBack:hover {
+    opacity: 1;
+}
+
+.leaflet-container {
+    background: black;
+}
+.leaflet-popup-content-wrapper {
+    background: var(--color-a);
+    color: #e1e1e1;
+    font-size: 14px;
+    line-height: 24px;
+    border-radius: 0;
+    max-height: 50vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.leaflet-popup-tip {
+}
+.leaflet-popup-close-button {
+    margin-right: 0px;
+    right: -20px !important;
+    padding: 3px 0px 0 0 !important;
+    width: 20px !important;
+    height: 20px !important;
+    color: #ffffff !important;
+    background: var(--color-mmgis) !important;
+}
+.leaflet-popup-content {
+    margin: 1px 7px 1px 7px;
+}
+
+.leafletDivIcon > * {
+    pointer-events: none !important;
+}
+
+.leaflet-marker-pane.hideDivIcons .leaflet-div-icon {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
+.noPointerEvents {
+    pointer-events: none;
+}
+.noPointerEventsImportant {
+    pointer-events: none !important;
+}
+
+.velocity-overlay {
+    transition: opacity 0.2s ease-in;
+}
+
+@media screen and (max-width: 600px) {
+    .mouseLngLat {
+        display: none;
+    }
+}
+
+.topHome {
+    display: flex;
+    padding: 0px 5px;
+    border: 1px solid var(--color-m1);
+    border-radius: 3px;
+    color: rgb(170, 170, 170);
+    line-height: 24px;
+    margin-left: 8px;
+    opacity: 0.8;
+    transition: opacity 0.25s ease-out;
+}
+.topHome:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+
+#mainDescMission {
+    -webkit-transition: all 0.25s ease-in;
+    transition: all 0.25s ease-in;
+    opacity: 0.8;
+}
+#mainDescMission:hover {
+    opacity: 1;
+}
+#mainDescPoint {
+    -webkit-transition: all 0.25s ease-in;
+    transition: all 0.25s ease-in;
+    opacity: 0.8;
+    font-size: 14px;
+    display: flex;
+    white-space: nowrap;
+    line-height: 30px;
+    color: var(--color-mw2);
+    font-weight: bold;
+    cursor: pointer;
+    margin: 0;
+}
+@media screen and (max-width: 800px) {
+    #mainDescPoint {
+        font-size: 11px;
+    }
+}
+#mainDescPoint:hover {
+    opacity: 1;
+}
+#mainDescPoint a {
+    height: 100%;
+    line-height: 30px;
+    padding: 0px 8px;
+    font-size: 11px;
+    background: var(--color-e);
+    color: white;
+    border-left: 1px solid var(--color-b);
+    opacity: 0.8;
+    transition: opacity 0.25s ease-out, background 0.25s ease-out;
+}
+#mainDescPoint a > i {
+    margin-left: 3px;
+}
+#mainDescPoint a:first-child {
+    margin-left: 4px;
+    border-left: none;
+}
+#mainDescPoint a:last-child {
+}
+#mainDescPoint a:hover {
+    opacity: 1;
+    background: var(--color-mmgis);
+}
+
+@media screen and (max-width: 800px) {
+    .mainDescPointInnerType {
+        display: none;
+    }
+    .mainDescLinkName {
+        display: none;
+    }
+}
+
+.ui.selection.list > .item.customColor1:hover {
+    background: rgba(18, 66, 84, 0.5) !important;
+}
+
+.leaflet-tile-pane {
+    image-rendering: pixelated;
+}
+
+.leaflet-control-zoom {
+    border: none !important;
+    margin-top: 40px !important;
+    margin-right: 5px !important;
+    user-select: none;
+}
+.leaflet-control-zoom a {
+    color: var(--color-f);
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    font-size: 18px !important;
+    border: none !important;
+    border-radius: 3px !important;
+    background: var(--color-a) !important;
+    transition: color 0.2s ease-in 0s;
+}
+.leaflet-control-zoom a:hover {
+    color: var(--color-mmgis);
+}
+
+.leaflet-popup-content-wrapper::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0px 0px 6px rgba(0, 0, 0, 0.3);
+    background-color: Transparent;
+}
+
+.leaflet-popup-content-wrapper::-webkit-scrollbar {
+    width: 4px;
+    height: 2px;
+    background-color: var(--color-a);
+}
+
+.leaflet-popup-content-wrapper::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+    background-color: #26a8ff;
+}
+
+.leaflet-popup-annotation {
+    left: 0px !important;
+    top: -15px !important;
+}
+.leaflet-popup-annotation > .leaflet-popup-content-wrapper {
+    background: transparent;
+    box-shadow: none;
+    max-height: none !important;
+}
+.leaflet-popup-annotation .leaflet-popup-content {
+    margin: 0;
+    width: auto !important;
+}
+.leaflet-popup-annotation .leaflet-popup-content > div {
+    position: relative;
+    left: -50%;
+}
+.leaflet-popup-annotation textarea {
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: none;
+    padding: 3px;
+}
+.leaflet-popup-annotation .leaflet-popup-tip-container {
+    display: none;
+}
+
+/*Leaflet fix that prevents shifting at higher zooms on single images*/
+.leaflet-container img.leaflet-image-layer {
+    max-width: none !important;
+}
+
+/*Openseadragon navigator border color*/
+.displayregion {
+    border: 2px solid var(--color-mh) !important;
+}
+.openseadragon-container .navigator {
+    border: 1px solid var(--color-a) !important;
+}
+.osd-custom-buttons > div {
+    width: 30px;
+    height: 30px;
+    background: var(--color-a);
+    line-height: 31px;
+    text-align: center;
+    margin-right: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+    color: #bbb;
+    display: inline-block;
+    position: relative;
+    transition: color 0.2s ease-out;
+}
+.osd-custom-buttons > div:hover {
+    color: white;
+}
+
+.cplot_axis path {
+    fill: none;
+    stroke: #161616;
+}
+.cplot_axis line {
+    fill: none;
+    stroke: #fff;
+}
+
+#toolcontroller_incdiv > div {
+    color: #bbb;
+}
+#toolcontroller_incdiv > div:hover {
+    color: white;
+}
+
+.ui-menu .ui-menu-item {
+    color: rgba(255, 255, 255, 0.87);
+    border: 1px solid transparent;
+    border-top: 1px solid var(--color-b);
+    transition: background 0.2s cubic-bezier(0.445, 0.05, 0.55, 0.95),
+        color 0.2s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+.ui-menu .ui-menu-item.ui-state-focus {
+    margin: 0;
+    background: var(--color-g);
+    color: white;
+}
+.ui-menu .ui-menu-item:hover {
+    background: var(--color-g);
+    color: white;
+}
+
+#scaleBar {
+    margin: 0;
+    margin-top: 5px;
+    pointer-events: none;
+    z-index: 1001;
+}
+
+#mmgis-map-compass {
+    display: flex;
+    cursor: auto;
+    pointer-events: auto;
+    position: absolute;
+    bottom: 38px;
+    left: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    background: var(--color-a);
+    border: 1px solid var(--color-a-5);
+    box-shadow: 0px 0px 3px 0px rgb(0 0 0);
+    transition: bottom 0.2s ease-out;
+}
+#mmgis-map-compass .spin {
+    width: 100%;
+    height: 100%;
+    padding: 2px 11px;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#mmgis-map-compass .info {
+    margin-left: 5px;
+    margin-top: -1px;
+    background: var(--color-a);
+    pointer-events: none;
+    height: 32px;
+    z-index: 100000;
+    padding: 1px 6px;
+    border-radius: 3px;
+    opacity: 0;
+    border: 1px solid var(--color-a-5);
+    transition: opacity 0.2s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+#mmgis-map-compass:hover .info {
+    opacity: 1;
+}
+#mmgis-map-compass .info .angle {
+    line-height: 17px;
+}
+#mmgis-map-compass .info .help {
+    white-space: nowrap;
+    display: flex;
+    line-height: 9px;
+    font-size: 11px;
+}
+#mmgis-map-compass .info .help > div {
+    width: 8px;
+    height: 8px;
+    background: #ff0000;
+    margin-right: 3px;
+}
+#mmgis-map-compass .north {
+    width: 0;
+    height: 0;
+    border-width: 0 4px 12px 4px;
+    border-color: transparent transparent #ff0000 transparent;
+    border-style: solid;
+}
+#mmgis-map-compass .south {
+    width: 0;
+    height: 0;
+    border-width: 12px 4px 0 4px;
+    border-color: var(--color-a7) transparent transparent transparent;
+    border-style: solid;
+    margin-top: 1px;
+}
+
+.autoWidth {
+    width: auto !important;
+}
+
+.childpointerevents > * {
+    pointer-events: auto;
+}
+
+*:focus {
+    outline: none;
+}
+/*Clear white highlighting*/
+::selection {
+    background-color: rgb(0, 158, 255) !important;
+    color: rgb(255, 255, 255) !important;
+}
+
+.flexbetween {
+    display: flex;
+    justify-content: space-between;
+}
+
+.leaflet-control-scalefactor {
+    position: absolute;
+    bottom: 28px;
+    left: 44px;
+    display: flex;
+    margin-left: 2px !important;
+    transition: bottom 0.2s ease-out;
+}
+.leaflet-control-scalefactor-goto {
+    white-space: nowrap;
+    padding: 0px 4px;
+    background: var(--color-a);
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--color-a-5);
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
+    padding: 0px 0px 0px 1px;
+    line-height: 14px;
+    color: #dcdcdc;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+.leaflet-control-scalefactor-goto:hover {
+    color: var(--color-c);
+}
+
+.cp-color-picker {
+    background: var(--color-a);
+    border-radius: 0px !important;
+    margin-left: -1px;
+    margin-top: 1px;
+}
+
+.leaflet-tile-pane svg.leaflet-tile {
+    pointer-events: none !important;
+}
+.leaflet-tile-pane svg.leaflet-tile path.leaflet-interactive {
+    pointer-events: auto;
+}
+
+.leaflet-tile-256 {
+    width: 256px !important;
+    height: 256px !important;
+}
+
+.kindsWedgeLayer {
+    pointer-events: none !important;
+}
+
+.topBarSearch {
+    height: 100%;
+    max-width: 380px;
+    width: 100vw;
+    background: var(--color-a);
+    border: 1px solid var(--color-a);
+    padding: 0px 8px;
+    font-size: 14px;
+    color: var(--color-mw2);
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    flex: 1;
+    transition: background 0.2s ease-out, border 0.2s ease-out;
+}
+.topBarSearch:hover {
+    background: var(--color-i);
+}
+.topBarSearch:focus {
+    border: 1px solid var(--color-mmgis);
+}
+.topBarSearch::placeholder {
+    color: #aaa;
+}
+
+.hoverOpensPanel .hoverOpeningPanel {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s cubic-bezier(0.445, 0.05, 0.55, 0.95),
+        background 0.2s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+.hoverOpensPanel .hoverOpeningPanel div:hover {
+    cursor: pointer;
+    color: white;
+    background: #151515;
+}
+.hoverOpensPanel:hover .hoverOpeningPanel {
+    opacity: 1;
+    pointer-events: initial;
+}
+
+.autocomplete-suggestions {
+    max-height: 60vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid var(--color-a2);
+    border-top: none;
+    background-color: var(--color-a1);
+    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
+}
+.autocomplete-suggestion {
+    padding: 5px 6px;
+    border-top: 1px solid var(--color-a2);
+    color: var(--color-f);
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 14px;
+}
+.autocomplete-suggestion:first-child {
+    border-top: 1px solid var(--color-a-5);
+}
+.autocomplete-suggestion:hover {
+    background: var(--color-a2);
+}
+.autocomplete-suggestion > strong {
+    font-weight: bold;
+    color: var(--color-mmgis);
+}
+
+.autocomplete-suggestion.autocomplete-selected {
+    background: var(--color-a2);
+}
+.autocomplete-suggestion.autocomplete-selected > strong {
+    text-decoration: underline;
+}
+
+.checkeredTransparent {
+    background-image: linear-gradient(45deg, #555 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #555 75%),
+        linear-gradient(45deg, transparent 75%, #555 75%),
+        linear-gradient(45deg, #555 25%, #999 25%);
+
+    background-size: 10px 10px;
+
+    background-position: 0 0, 0 0, -5px -5px, 5px 5px;
+}
+
+.leafletMarkerShape {
+    background: none;
+}
+.leafletMarkerFont {
+    background: none;
+    border: none;
+}
+
+.leaflet-bottom.leaflet-left {
+    transition: bottom 0.2s ease-in;
+}
+
+.leaflet-popup-annotation > .leaflet-popup-content-wrapper {
+    overflow: visible;
+}
+
+.highlightAnim1 {
+    animation-name: highlightAnim1;
+    animation-duration: 1.2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    color: white;
+}
+@-webkit-keyframes highlightAnim1 {
+    0% {
+        background-color: #008321;
+    }
+    50% {
+        background-color: #00c932;
+    }
+    100% {
+        background-color: #008321;
+    }
+}
+
+.leaflet_FGDCGeoSym > div {
+    transform: translateX(-50%) translateY(-50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+#_lithosphere_controls_topleft {
+    top: 40px !important;
+}
+#_lithosphere_controls_topright {
+    top: 40px !important;
+    right: -5px !important;
+}
+#_lithosphere_control_mmgisLithoNavigation svg {
+    box-sizing: unset !important;
+}
+
+.mdi-12px.mdi-set,
+.mdi-12px.mdi:before {
+    font-size: 12px;
+}
+
+.mmgisAnnotation {
+    font-size: 18px;
+    background: transparent;
+    border: none;
+    padding: 2px;
+    white-space: nowrap;
+    user-select: none;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s cubic-bezier(0.445, 0.05, 0.55, 0.95),
+        transform 0s ease-in-out;
+}
+.mmgisAnnotation.highlight {
+    color: #7fff00 !important;
+}
+
+/* Feature Label */
+.mmgisFeatureLabel {
+    padding: 0;
+    background: transparent;
+    border: none;
+    pointer-events: none;
+}
+.mmgisFeatureLabel::before {
+    display: none;
+}
+.mmgisFeatureLabel .mmgisFeatureLabelContent {
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+        1px 1px 0 #000;
+}
+.mmgisFeatureLabel.mmgisLabelTheme-solid .mmgisFeatureLabelContent {
+    text-shadow: none;
+    background: var(--color-a);
+    padding: 1px 6px;
+}
+.mmgisFeatureLabel.mmgisLabelTheme-default {
+    box-shadow: none;
+}
+.mmgisFeatureLabel.mmgisLabelSize-default .mmgisFeatureLabelContent {
+    line-height: 17px;
+    font-size: 14px;
+}
+.mmgisFeatureLabel.mmgisLabelSize-large .mmgisFeatureLabelContent {
+    line-height: 21px;
+    font-size: 16px;
+}
+
+mark {
+    background: var(--color-green2) !important;
+    border-radius: 2px;
+    padding: 0px 1px;
+}
+
+/* Tempus Dominus Time Picker */
+.tempus-dominus-widget.dark {
+    background: var(--color-a-5) !important;
+    padding: 12px 8px 8px 8px !important;
+    border-radius: 0px;
+    border-bottom: 2px solid black;
+}
+.tempus-dominus-widget.dark
+    .date-container-decades
+    div:not(.no-highlight).active,
+.tempus-dominus-widget.dark .date-container-years div:not(.no-highlight).active,
+.tempus-dominus-widget.dark
+    .date-container-months
+    div:not(.no-highlight).active,
+.tempus-dominus-widget.dark .date-container-days div:not(.no-highlight).active,
+.tempus-dominus-widget.dark .time-container-clock div:not(.no-highlight).active,
+.tempus-dominus-widget.dark .time-container-hour div:not(.no-highlight).active,
+.tempus-dominus-widget.dark
+    .time-container-minute
+    div:not(.no-highlight).active,
+.tempus-dominus-widget.dark
+    .time-container-second
+    div:not(.no-highlight).active {
+    background: var(--color-c2) !important;
+    border-radius: 0px;
+}
+
+#mainDescPointLinks ul {
+    width: fit-content;
+}
+#mainDescPointLinks .dropy__title {
+    height: 30px;
+    border: none;
+    margin-left: 9px;
+    width: 60px;
+    background: var(--color-a1);
+}
+#mainDescPointLinks .dropy__title > span {
+    padding-top: 2px;
+}
+#mainDescPointLinks .dropy__title > i {
+    line-height: 15px;
+}
+
+#mainDescPointLinks_global .dropy__content li a {
+    padding: 0.425rem 1.0375em;
+    height: 30px;
+}

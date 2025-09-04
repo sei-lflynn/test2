@@ -1,0 +1,18 @@
+# Systemd unit file for kmc-sa-mgmt-service
+#
+[Unit]
+Description=KMC SA Management Service
+After=syslog.target network.target
+
+[Service]
+Type=exec
+EnvironmentFile=/etc/sysconfig/kmc-sa-mgmt-service
+PIDFile=__LOGPATH__/kmc-sa-mgmt-service.pid
+ExecStart=/bin/bash -c '${JAVA_HOME}/bin/java ${JAVA_OPTS} -jar __SVCPATH__/kmc-sa-mgmt.jar --spring.config.location=classpath:kmc-sa-mgmt-service.properties,optional:__CFGPATH__/kmc-sa-mgmt-service.properties'
+ExecStop=/bin/kill ${MAINPID}
+#SuccessExitStatus=143
+User=__CRYPTOUSR__
+Group=__CRYPTOGRP__
+
+[Install]
+WantedBy=multi-user.target
